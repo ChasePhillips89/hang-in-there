@@ -10,10 +10,12 @@ var showFormBtn = document.querySelector(".show-form");
 var makePosterBtn = document.querySelector(".make-poster");
 var showSavedBtn = document.querySelector(".show-saved");
 var showMainBtn = document.querySelector(".show-main");
+var savePosterBtn = document.querySelector(".save-poster");
 var backToMainBtn = document.querySelector(".back-to-main");
 var userInputImage = document.querySelector("#poster-image-url")
 var userInputTitle = document.querySelector("#poster-title")
 var userInputQuote = document.querySelector("#poster-quote")
+var savedPostersGrid = document.querySelector(".saved-posters-grid");
 
 var images = [
   "./assets/bees.jpg",
@@ -120,18 +122,28 @@ randomizeBtn.addEventListener("click", randomizePoster);
 showFormBtn.addEventListener("click", showForm);
 makePosterBtn.addEventListener("click", function (event) 
 {event.preventDefault() 
-  console.log("Button clicked!");
   displayUserInputPoster()});
 showSavedBtn.addEventListener("click", showSavedPosters);
 showMainBtn.addEventListener("click", showMainPage);
 backToMainBtn.addEventListener("click", showMainPage);
+savePosterBtn.addEventListener("click", function(event) {
+  event.preventDefault();
+  saveCurrentPoster(); 
+});
 
 
 
 // functions and event handlers go here 👇
 // (we've provided two to get you started)!
 
-window.onload = randomizePoster;
+window.onload = function() {
+  currentPoster = createPoster(
+    images[getRandomIndex(images)], 
+    titles[getRandomIndex(titles)], 
+    quotes[getRandomIndex(quotes)]
+  );
+  randomizePoster();
+};
 
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
@@ -145,10 +157,30 @@ function createPoster(imageURL, title, quote) {
     quote: quote}
 }
 
+function saveCurrentPoster() {
+  if (!currentPoster) return;
+
+  var isDuplicate = savedPosters.some(function(savedPoster) {
+    return savedPoster.imageURL === currentPoster.imageURL &&
+           savedPoster.title === currentPoster.title &&
+           savedPoster.quote === currentPoster.quote;
+  });
+
+  if (!isDuplicate) {
+    savedPosters.push(currentPoster);
+  }
+}
+
 function randomizePoster() {
-  posterImg.src = images[getRandomIndex(images)]; 
-  posterTitle.innerText = titles[getRandomIndex(titles)];  
-  posterQuote.innerText = quotes[getRandomIndex(quotes)];  
+  currentPoster = createPoster(
+    images[getRandomIndex(images)], 
+    titles[getRandomIndex(titles)], 
+    quotes[getRandomIndex(quotes)]
+  );
+
+  posterImg.src = currentPoster.imageURL;
+  posterTitle.innerText = currentPoster.title;
+  posterQuote.innerText = currentPoster.quote;
 }
 
 function showForm() {
@@ -164,11 +196,26 @@ function showMainPage() {
   mainPage.classList.remove("hidden"); 
 
 }
-
 function showSavedPosters() {
   mainPage.classList.add("hidden");
   formSection.classList.add("hidden");
   savedPostersSection.classList.remove("hidden");
+
+  savedPostersGrid.innerHTML = "";
+
+  for (var i = 0; i < savedPosters.length; i++) {
+    var poster = savedPosters[i];
+
+    var posterElement = document.createElement("div");
+    posterElement.classList.add("mini-poster");
+
+    posterElement.innerHTML = 
+      '<img src="' + poster.imageURL + '" alt="Saved Poster">' +
+      '<h3>' + poster.title + '</h3>' +
+      '<p>' + poster.quote + '</p>';
+
+    savedPostersGrid.appendChild(posterElement);
+  }
 }
 
 function displayUserInputPoster() {
@@ -177,5 +224,7 @@ function displayUserInputPoster() {
   posterTitle.innerText = currentPoster.title
   posterQuote.innerText = currentPoster.quote
 
+  formSection.classList.add("hidden");
+  mainPage.classList.remove("hidden");
 
 }
