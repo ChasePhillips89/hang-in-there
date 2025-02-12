@@ -259,6 +259,8 @@ savePosterBtn.addEventListener("click", function(event) {
   event.preventDefault();
   saveCurrentPoster(); 
 });
+unmotivationalPostersGrid.addEventListener("dblclick", deleteUnmotivationalPoster);
+document.addEventListener("DOMContentLoaded", dataToGrid);
 
 
 
@@ -335,14 +337,26 @@ function showSavedPosters() {
 
   savedPostersGrid.innerHTML = "";
 
-  for (var i = 0; i < savedPosters.length; i++) {
-    savedPostersGrid.innerHTML += `
-      <div class="mini-poster">
-        <img src="${savedPosters[i].imageURL}" alt="Saved Poster">
-        <h3>${savedPosters[i].title}</h3>
-        <p>${savedPosters[i].quote}</p>
-      </div>`;
-  }
+  savedPosters.forEach(poster => {
+    let posterDiv = document.createElement('div');
+    posterDiv.classList.add('mini-poster');
+
+    let img = document.createElement('img');
+    img.src = poster.imageURL;
+    img.alt = 'Saved Poster';
+
+    let title = document.createElement('h3');
+    title.textContent = poster.title;
+
+    let quote = document.createElement('p');
+    quote.textContent = poster.quote;
+
+    posterDiv.appendChild(img);
+    posterDiv.appendChild(title);
+    posterDiv.appendChild(quote);
+
+    savedPostersGrid.appendChild(posterDiv);
+  });
 }
 
 function showUnmotivationalPosters() {
@@ -351,35 +365,61 @@ function showUnmotivationalPosters() {
   unmotivationalPosterSection.classList.remove("hidden");
   mainPage.classList.add("hidden");
 
-  unmotivationalPostersGrid.innerHTML = "";
-
-  for (var i = 0; i < unmotivationalPosters.length; i++) {
-    unmotivationalPostersGrid.innerHTML += `
-      <div class="mini-poster">
-        <img src="${unmotivationalPosters[i].img_url}" alt="${unmotivationalPosters[i].name}">
-        <h3>${unmotivationalPosters[i].name}</h3>
-        <p>${unmotivationalPosters[i].description}</p>
-      </div>`;
-  }
 }
 
+function dataToGrid() {
+  unmotivationalPostersGrid.innerHTML = "";
+
+  unmotivationalPosters.forEach(poster => {
+    let posterDiv = document.createElement('div');
+    posterDiv.classList.add('mini-poster');
+
+    let img = document.createElement('img');
+    img.src = poster.img_url;
+    img.alt = poster.name;
+
+    let title = document.createElement('h3');
+    title.innerHTML = poster.name; 
+
+    let description = document.createElement('p');
+    description.innerHTML = poster.description;  
+
+    posterDiv.appendChild(img);
+    posterDiv.appendChild(title);
+    posterDiv.appendChild(description);
+
+    unmotivationalPostersGrid.appendChild(posterDiv);
+  });
+}
 function displayUserInputPoster() {
   currentPoster = createPoster(userInputImage.value, userInputTitle.value, userInputQuote.value)
   posterImg.src = currentPoster.imageURL
   posterTitle.innerText = currentPoster.title
   posterQuote.innerText = currentPoster.quote
-
+  
   formSection.classList.add("hidden");
   mainPage.classList.remove("hidden");
 
 }
 
 function processUnmotivationalPosters() {
-  cleanUnmotivationalPosters = []; 
+  cleanUnmotivationalPosters = unmotivationalPosters.map(poster => 
+    createPoster(poster.img_url, poster.name, poster.description)
+  );
+}
 
-  for (var i = 0; i < unmotivationalPosters.length; i++) {
-    var poster = unmotivationalPosters[i];
-    cleanUnmotivationalPosters.push(createPoster(poster.img_url, poster.name, poster.description)); 
-  }
+function deleteUnmotivationalPoster() {
+  
+  var poster = event.target.closest(".mini-poster")
+  var title = poster.querySelector("h3").innerHTML
+
+
+cleanUnmotivationalPosters = cleanUnmotivationalPosters.filter((poster) => {
+  !poster.title === title
+})
+
+  poster.remove()
+
+  
 }
 
