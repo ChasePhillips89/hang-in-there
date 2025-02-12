@@ -266,15 +266,6 @@ document.addEventListener("DOMContentLoaded", dataToGrid);
 
 // functions and event handlers go here 👇
 
-window.onload = function() {
-  currentPoster = createPoster(
-    images[getRandomIndex(images)], 
-    titles[getRandomIndex(titles)], 
-    quotes[getRandomIndex(quotes)]
-  );
-  randomizePoster();
-};
-
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
 }
@@ -418,8 +409,7 @@ cleanUnmotivationalPosters = cleanUnmotivationalPosters.filter((poster) => {
   !poster.title === title
 })
 
-  poster.remove()
-
-  
+  poster.remove()  
 }
 
+window.onload = randomizePoster;
