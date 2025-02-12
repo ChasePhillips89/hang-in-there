@@ -1,12 +1,14 @@
-// query selector variables go here 👇
+// query selector variables 
 var posterImg = document.querySelector(".poster-img");
 var posterTitle = document.querySelector(".poster-title");
 var posterQuote = document.querySelector(".poster-quote");
-var randomizeBtn = document.querySelector(".show-random");
+
 var mainPage = document.querySelector(".main-poster");
 var unmotivationalPosterSection = document.querySelector(".unmotivational-posters");
 var formSection = document.querySelector(".poster-form");
 var savedPostersSection = document.querySelector(".saved-posters");
+
+var randomizeBtn = document.querySelector(".show-random");
 var showFormBtn = document.querySelector(".show-form");
 var makePosterBtn = document.querySelector(".make-poster");
 var showUnmotivationalPostersBtn = document.querySelector(".show-unmotivational");
@@ -14,11 +16,16 @@ var showSavedBtn = document.querySelector(".show-saved");
 var showMainBtn = document.querySelector(".show-main");
 var savePosterBtn = document.querySelector(".save-poster");
 var backToMainButtons = document.querySelectorAll(".back-to-main");
+
 var userInputImage = document.querySelector("#poster-image-url")
 var userInputTitle = document.querySelector("#poster-title")
 var userInputQuote = document.querySelector("#poster-quote")
+
 var savedPostersGrid = document.querySelector(".saved-posters-grid");
 var unmotivationalPostersGrid = document.querySelector(".unmotivational-posters-grid");
+
+var savedPosters = [];
+var cleanUnmotivationalPosters = [];
 
 var images = [
   "./assets/bees.jpg",
@@ -239,11 +246,8 @@ var unmotivationalPosters = [
     img_url: "./assets/doubt.jpg",
   }
 ];
-var savedPosters = [];
-var currentPoster;
-var cleanUnmotivationalPosters = [];
 
-// event listeners go here 👇
+// event listeners 
 randomizeBtn.addEventListener("click", randomizePoster);
 showFormBtn.addEventListener("click", showForm);
 makePosterBtn.addEventListener("click", function (event) 
@@ -264,7 +268,7 @@ document.addEventListener("DOMContentLoaded", dataToGrid);
 
 
 
-// functions and event handlers go here 👇
+// functions and event handlers
 
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
