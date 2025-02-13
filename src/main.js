@@ -26,6 +26,7 @@ var unmotivationalPostersGrid = document.querySelector(".unmotivational-posters-
 
 var savedPosters = [];
 var cleanUnmotivationalPosters = [];
+var currentPoster;
 
 var images = [
   "./assets/bees.jpg",
@@ -259,17 +260,14 @@ showUnmotivationalPostersBtn.addEventListener("click", showUnmotivationalPosters
 backToMainButtons.forEach(function(button) {
   button.addEventListener("click", showMainPage);
 });
-savePosterBtn.addEventListener("click", function(event) {
-  event.preventDefault();
-  saveCurrentPoster(); 
-});
+savePosterBtn.addEventListener("click",saveCurrentPoster); 
+
 unmotivationalPostersGrid.addEventListener("dblclick", deleteUnmotivationalPoster);
 document.addEventListener("DOMContentLoaded", dataToGrid);
 
 
 
 // functions and event handlers
-
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
 }
